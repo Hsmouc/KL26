@@ -10,6 +10,7 @@
 #include "adc.h"
 #include "pit.h"
 #include "TPM.h"
+#include "tools.h"
 #include <math.h>
 #include <stdint.h>
 
@@ -38,7 +39,8 @@ void PIT_userInit(void);
 void IMU_userInit(void);
 void inductance_userInit(void);
 
-float getIMUValue(uint8_t);
+float getAcczValue(uint8_t);
+float getGyroValue(uint8_t);
 float getInductanceValue(uint8_t);
 
 #endif

@@ -161,25 +161,25 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>75</LineNumber>
+          <LineNumber>41</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>11532</Address>
+          <Address>12830</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
-          <Filename>.\src\USR\app.c</Filename>
+          <Filename>.\src\USR\main.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\newKL26\src/USR/app.c\75</Expression>
+          <Expression>\\newKL26\src/USR/main.c\41</Expression>
         </Bp>
       </Breakpoint>
       <WatchWindow1>
         <Ww>
           <count>0</count>
           <WinNumber>1</WinNumber>
-          <ItemText>imu_offset</ItemText>
+          <ItemText>balance,0x0A</ItemText>
         </Ww>
       </WatchWindow1>
       <WatchWindow2>

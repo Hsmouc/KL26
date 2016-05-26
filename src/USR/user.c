@@ -3,6 +3,7 @@
 #define ACCZ_X_OFFSET (0)
 #define ACCZ_Y_OFFSET (0x078E)
 #define ACCZ_Z_OFFSET (0)
+#define _PI (3.1415926f)
 
 static const PeripheralMapTypeDef ADC_Check_Maps[] =
 {
@@ -45,12 +46,12 @@ uint32_t ADC_CalxMap(uint8_t chl){
 }
 
 const uint8_t adc_number = 10;
-const uint8_t adc_index[adc_number]={7,8,5,9,11,10,15,16,17,19};
+const uint8_t adc_index[adc_number]={9,11,10,7,8,5,15,16,17,19};
 //======================================================================
 //获取ADC口信号函数
 //入口：通道(channel):
-//	0,1,2:   加速度计 X、Y、Z
-//	3,4,5 :  陀螺仪   X、Y、Z
+//	0,1,2:   陀螺仪   X、Y、Z
+//	3,4,5 :  加速度计 X、Y、Z
 //	6,7,8,9: 电感
 //返回：信号值
 //======================================================================
@@ -144,7 +145,16 @@ void IMU_userInit(){
 float getIMUValue(uint8_t index){
 	int32_t tmp_value;
 	tmp_value = ADC_GetValue(index)>>4;
-	return (tmp_value-(int32_t)imu_offset[index])*imu_ratio[index];
+	return ((float)tmp_value-imu_offset[index])*imu_ratio[index];
+}
+
+float getAcczValue(uint8_t index) {
+	float tmp = getIMUValue(index);
+	return asin((flimit(tmp,100)+100)/200.)*180/_PI;
+}
+
+float getGyroValue(uint8_t index){
+	return getIMUValue(index);
 }
 
 float getInductanceValue(uint8_t index){
