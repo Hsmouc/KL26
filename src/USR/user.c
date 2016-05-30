@@ -91,7 +91,8 @@ void GPIO_userInit(void){
 	
 	initer.GPIO_Pin = 10;
 	GPIO_Init(&initer);
-	
+
+	initer.GPIO_Mode = GPIO_Mode_IN_FLOATING;
 	initer.GPIOx = PTE;
 	initer.GPIO_Pin = 3;
 	GPIO_Init(&initer);
