@@ -38,6 +38,7 @@ void GPIO_userInit(void);
 void PIT_userInit(void);
 void IMU_userInit(void);
 void inductance_userInit(void);
+void gyro_offsetInit(void);
 
 float getAcczValue(uint8_t);
 float getGyroValue(uint8_t);

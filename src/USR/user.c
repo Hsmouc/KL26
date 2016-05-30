@@ -1,5 +1,9 @@
 #include "user.h"
 
+#define GYRO_X_OFFSET (0)
+#define GYRO_Y_OFFSET (0x0755)
+#define GYRO_Z_OFFSET (0)
+
 #define ACCZ_X_OFFSET (0)
 #define ACCZ_Y_OFFSET (0x078E)
 #define ACCZ_Z_OFFSET (0)
@@ -65,13 +69,13 @@ void inductance_userInit(void){
 	ADC_InitTypeDef initer;
 	initer.ADC_Precision = ADC_PRECISION_16BIT;
 	initer.ADC_TriggerSelect = ADC_TRIGGER_SW;
-	initer.ADCxMap = ADC_CalxMap(INDUCTANCE_LL);
+	initer.ADCxMap = ADC_CalxMap(adc_index[INDUCTANCE_LL]);
 	ADC_Init(&initer);
-	initer.ADCxMap = ADC_CalxMap(INDUCTANCE_LR);
+	initer.ADCxMap = ADC_CalxMap(adc_index[INDUCTANCE_LR]);
 	ADC_Init(&initer);
-	initer.ADCxMap = ADC_CalxMap(INDUCTANCE_RL);
+	initer.ADCxMap = ADC_CalxMap(adc_index[INDUCTANCE_RL]);
 	ADC_Init(&initer);
-	initer.ADCxMap = ADC_CalxMap(INDUCTANCE_RR);
+	initer.ADCxMap = ADC_CalxMap(adc_index[INDUCTANCE_RR]);
 	ADC_Init(&initer);
 }
 
@@ -107,7 +111,7 @@ void PWM_userInit(){
 
 static const uint8_t imu_number = 6;
 static float imu_ratio[imu_number] = {0.23578,0.120248,0,0,0.086,0};
-static uint32_t imu_offset[imu_number] = {0,0,0,ACCZ_X_OFFSET, ACCZ_Y_OFFSET, ACCZ_Z_OFFSET};
+static uint32_t imu_offset[imu_number] = {GYRO_X_OFFSET,GYRO_Y_OFFSET,GYRO_Z_OFFSET,ACCZ_X_OFFSET, ACCZ_Y_OFFSET, ACCZ_Z_OFFSET};
 
 //ÍÓÂÝÒÇÁãÆ«Öµ³õÊ¼»¯º¯Êý
 void gyro_offsetInit(void) {
@@ -139,7 +143,6 @@ void IMU_userInit(){
 	
 	initer.ADCxMap = ADC_CalxMap(adc_index[GYRO_Y]);
 	ADC_Init(&initer);
-	gyro_offsetInit();
 }
 
 float getIMUValue(uint8_t index){
@@ -150,7 +153,7 @@ float getIMUValue(uint8_t index){
 
 float getAcczValue(uint8_t index) {
 	float tmp = getIMUValue(index);
-	return asin((flimit(tmp,100)+100)/200.)*180/_PI;
+	return asin((flimit(tmp,100))/100.)*180/_PI;
 }
 
 float getGyroValue(uint8_t index){

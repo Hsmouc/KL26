@@ -34,7 +34,7 @@ int main(void){
 		
 		if(PIT_GetITStatus(PIT0, PIT_IT_TIF) == SET){
 			PIT_ClearITPendingBit(PIT0, PIT_IT_TIF);
-			
+			if(time == 100) { gyro_offsetInit(); }
 			if(time < 300) { ++time; }
 			
 			balance = balanceCtrl();
@@ -45,8 +45,6 @@ int main(void){
 		if(time < 300) {
 			balance = speed = turn = 0;
 		}
-		speed = turn = 0;
 		motorControl(balance, speed, turn);
-		
 	}
 }
