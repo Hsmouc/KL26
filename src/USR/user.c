@@ -1,9 +1,8 @@
 #include "user.h"
 
-#define GYRO_X_OFFSET (0)
-#define GYRO_Y_OFFSET (0x0755)
+#define GYRO_X_OFFSET (0x07FC)
+#define GYRO_Y_OFFSET (0x0753)
 #define GYRO_Z_OFFSET (0)
-
 #define ACCZ_X_OFFSET (0)
 #define ACCZ_Y_OFFSET (0x078E)
 #define ACCZ_Z_OFFSET (0)
@@ -61,22 +60,7 @@ const uint8_t adc_index[adc_number]={9,11,10,7,8,5,15,16,17,19};
 //======================================================================
 
 uint32_t ADC_GetValue(uint8_t index){
-	index = adc_index[index];
-	return ADC_GetConversionValue(ADC_CalxMap(index));
-}
-
-void inductance_userInit(void){
-	ADC_InitTypeDef initer;
-	initer.ADC_Precision = ADC_PRECISION_16BIT;
-	initer.ADC_TriggerSelect = ADC_TRIGGER_SW;
-	initer.ADCxMap = ADC_CalxMap(adc_index[INDUCTANCE_LL]);
-	ADC_Init(&initer);
-	initer.ADCxMap = ADC_CalxMap(adc_index[INDUCTANCE_LR]);
-	ADC_Init(&initer);
-	initer.ADCxMap = ADC_CalxMap(adc_index[INDUCTANCE_RL]);
-	ADC_Init(&initer);
-	initer.ADCxMap = ADC_CalxMap(adc_index[INDUCTANCE_RR]);
-	ADC_Init(&initer);
+	return ADC_GetConversionValue(ADC_CalxMap(adc_index[index]));
 }
 
 void GPIO_userInit(void){
@@ -91,8 +75,7 @@ void GPIO_userInit(void){
 	
 	initer.GPIO_Pin = 10;
 	GPIO_Init(&initer);
-
-	initer.GPIO_Mode = GPIO_Mode_IN_FLOATING;
+	
 	initer.GPIOx = PTE;
 	initer.GPIO_Pin = 3;
 	GPIO_Init(&initer);
@@ -145,6 +128,21 @@ void IMU_userInit(){
 	initer.ADCxMap = ADC_CalxMap(adc_index[GYRO_Y]);
 	ADC_Init(&initer);
 }
+
+void inductance_userInit(void){
+	ADC_InitTypeDef initer;
+	initer.ADC_Precision = ADC_PRECISION_16BIT;
+	initer.ADC_TriggerSelect = ADC_TRIGGER_SW;
+	initer.ADCxMap = ADC_CalxMap(adc_index[INDUCTANCE_LL]);
+	ADC_Init(&initer);
+	initer.ADCxMap = ADC_CalxMap(adc_index[INDUCTANCE_LR]);
+	ADC_Init(&initer);
+	initer.ADCxMap = ADC_CalxMap(adc_index[INDUCTANCE_RL]);
+	ADC_Init(&initer);
+	initer.ADCxMap = ADC_CalxMap(adc_index[INDUCTANCE_RR]);
+	ADC_Init(&initer);
+}
+
 
 float getIMUValue(uint8_t index){
 	int32_t tmp_value;

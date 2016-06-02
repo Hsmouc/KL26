@@ -5,9 +5,11 @@
 #include "adc.h"
 #include "TPM.h"
 #include "counter.h"
-
 #include "user.h"
 #include "app.h"
+
+#define START_DELAY (200)
+#define DELAY_DELTA (100)
 
 int32_t balance = 0, speed = 0, turn = 0;
 uint16_t time = 0;
@@ -30,20 +32,26 @@ int main(void){
 	Counter0_Init();
 	Counter1_Init();
 	
-	
 	while(1){
+		
 		if(PIT_GetITStatus(PIT0, PIT_IT_TIF) == SET){
 			PIT_ClearITPendingBit(PIT0, PIT_IT_TIF);
-			if(time == 250) { gyro_offsetInit(); }
+			
+			if(time == START_DELAY-DELAY_DELTA) { gyro_offsetInit(); }
 			if(time < 3000) { ++time; }
+			
 			balance = balanceCtrl();
 			speed = speedCtrl();
 			turn = directionCtrl();
 		}
 		
-		if(time < 300) {
+		if(time < START_DELAY) {
 			balance = speed = turn = 0;
 		}
+		if(time < START_DELAY+DELAY_DELTA) {
+			speed = turn = 0;
+		}
+		
 		motorControl(balance, speed, turn);
 	}
 }

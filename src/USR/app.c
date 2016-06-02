@@ -47,8 +47,8 @@ float getDirectionData(){
 		result[i] = sum_value / queue_length;
 	}
 	
-	right = (result[0] /*+ result[1]*/)*.8;
-	left  = (result[3] /*+ result[2]*/);
+	left  = (result[0]/* + result[3]*/)*0.8;
+	right = (result[3]/* + result[1]*/);
 	
 	err = left - right;
 	sum = left + right + 1;
@@ -58,14 +58,14 @@ float getDirectionData(){
 
 int32_t balanceCtrl() {
 	const float dt = 0.005;
-	const float ratio = 0.995;
-	const float balance_Kp = 1150;
+	const float ratio = 0.99611;
+	const float balance_Kp = 1100;
   const float balance_Kd = 20;
-	const float set_angle = -7.5;
+	const float set_angle = -5.5;
 	static float cur_angle = 0;
-	static float err_angle;
-	static float accz;
-	static float gyro;
+	float err_angle;
+	float accz;
+	float gyro;
 	float result;
 
 	accz = getAcczValue(ACCZ_Y);
@@ -80,22 +80,15 @@ int32_t balanceCtrl() {
 	return (int32_t) result;
 }
 
-#define RUN_SPEED 50
-
-int32_t get_set_speed(){
-	const uint8_t max_cnt = 4;
-	static uint8_t cnt = 0;
-	if(cnt < max_cnt) { ++cnt; }
-	return RUN_SPEED*cnt/max_cnt;
-}
+#define RUN_SPEED (35)
 
 float speedCalc(float m_speed) {
-	float max_speed_i = 1200;
-	float speedCtrlKp = 300;
-	float speedCtrlKi = 15;
+	const float max_speed_i = 1100;
+	const float speedCtrlKp = 240;
+	const float speedCtrlKi = 5;
 	static float speed_err, speed_p, speed_i = 0;
 	
-	speed_err =  m_speed - get_set_speed();
+	speed_err =  m_speed - RUN_SPEED/(time>500?1:5);
 	
 	speed_p = speed_err*speedCtrlKp;
 	speed_i += speed_err*speedCtrlKi;
@@ -109,7 +102,7 @@ int32_t speedCtrl() {
 	const uint8_t maxSpeed_period = 100;
 	static uint8_t speed_period = 0;
 	static float cur_speed = 0, pre_speed = 0, err_speed, result;
-	static float m_speed;
+	float m_speed;
 	
 	m_speed = getSpeedData();
 	
@@ -129,7 +122,7 @@ int32_t speedCtrl() {
 float directionCalc(){
 	const float gyro_K = 0;
 	const float sensor_Kp = 8;
-	const float sensor_Kd = 400;
+	const float sensor_Kd = 270;
 	static float cur_sensor = 0, pre_sensor = 0;
 	static float gyro;
 	static float sensor_p;
