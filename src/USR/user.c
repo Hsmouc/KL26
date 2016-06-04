@@ -76,6 +76,19 @@ void GPIO_userInit(void){
 	initer.GPIO_Pin = 10;
 	GPIO_Init(&initer);
 	
+  initer.GPIO_Pin = 17;
+	GPIO_Init(&initer);
+	
+	initer.GPIO_Pin = 18;
+	GPIO_Init(&initer);
+	
+	initer.GPIO_Pin = 19;
+	GPIO_Init(&initer);
+	
+	initer.GPIO_Pin = 20;
+	GPIO_Init(&initer);
+	
+	initer.GPIO_Mode = GPIO_Mode_IPU;
 	initer.GPIOx = PTE;
 	initer.GPIO_Pin = 3;
 	GPIO_Init(&initer);

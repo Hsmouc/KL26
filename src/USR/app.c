@@ -1,4 +1,13 @@
 #include "app.h"
+extern float balance_Kp;
+extern float balance_Kd;
+extern float set_angle;
+extern float run_speed;
+extern float speedCtrlKp;
+extern float speedCtrlKi;
+extern float gyro_K;
+extern float sensor_Kp;
+extern float sensor_Kd;
 
 float getSpeedData(void) {
 	const float BMQ_SPEED_RATIO = 0.554508;
@@ -59,9 +68,6 @@ float getDirectionData(){
 int32_t balanceCtrl() {
 	const float dt = 0.005;
 	const float ratio = 0.99611;
-	const float balance_Kp = 1300;
-  const float balance_Kd = 20;
-	const float set_angle = -5.5;
 	static float cur_angle = 0;
 	float err_angle;
 	float accz;
@@ -80,15 +86,11 @@ int32_t balanceCtrl() {
 	return (int32_t) result;
 }
 
-#define RUN_SPEED (35)
-
 float speedCalc(float m_speed) {
 	const float max_speed_i = 1000;
-	const float speedCtrlKp = 320;
-	const float speedCtrlKi = 5;
 	static float speed_err, speed_p, speed_i = 0;
 	
-	speed_err =  m_speed - RUN_SPEED/(time>500?1:4);
+	speed_err =  m_speed - run_speed/(time>500?1:5);
 	
 	speed_p = speed_err*speedCtrlKp;
 	speed_i += speed_err*speedCtrlKi;
@@ -120,9 +122,6 @@ int32_t speedCtrl() {
 }
 
 float directionCalc(){
-	const float gyro_K = 0;
-	const float sensor_Kp = 8.5;
-	const float sensor_Kd = 400;
 	static float cur_sensor = 0, pre_sensor = 0;
 	static float gyro;
 	static float sensor_p;
